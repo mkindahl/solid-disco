@@ -1,15 +1,19 @@
 on: workflow_dispatch
 jobs:
-  name: Start release
-  steps:
-    - uses: actions/checkout@v2
-    - run: |
-        echo GITHUB_REF: $GITHUB_REF
-        echo github.ref: ${{ github.ref }}
-    - uses: peter-evans/repository-dispatch@v1
-      name: Trigger release workflow
-      with:
-        token: ${{ secrets.REPO_GHA_PAT }}
-        repository: mkindahl/ubiquitous-train
-        event-type: trigger-release
-        client-payload: '{"ref": "${{ github.ref }}"}'    
+  start_release:
+    name: Start release $GITHUB_REF
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Print info
+        run: |
+          echo GITHUB_REF: $GITHUB_REF
+          echo github.ref: ${{ github.ref }}
+      - uses: peter-evans/repository-dispatch@v1
+        name: Trigger release workflow
+        with:
+          token: ${{ secrets.PERSONAL_TOKEN }}
+          repository: mkindahl/ubiquitous-train
+          event-type: trigger-release
+          client-payload: '{"ref": "${{ github.ref }}"}'

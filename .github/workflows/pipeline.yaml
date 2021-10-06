@@ -1,7 +1,7 @@
 on: workflow_dispatch
 jobs:
   start_release:
-    name: Start release $GITHUB_REF
+    name: Start release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

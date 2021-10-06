@@ -10,10 +10,14 @@ jobs:
         run: |
           echo GITHUB_REF: $GITHUB_REF
           echo github.ref: ${{ github.ref }}
-      - uses: peter-evans/repository-dispatch@v1
-        name: Trigger release workflow
+      - name: Trigger release workflow
+        uses: adityakar/workflow-dispatcher@v1.0
         with:
+          owner: mkindahl
           token: ${{ secrets.PERSONAL_TOKEN }}
-          repository: mkindahl/ubiquitous-train
-          event-type: trigger-release
-          client-payload: '{"ref": "${{ github.ref }}"}'
+          repo: ubiquitous-train
+          event_type: trigger-release
+          client_payload: '{"ref": "${{ github.ref }}"}'
+      - name: All done
+        run: |
+          echo "All done"

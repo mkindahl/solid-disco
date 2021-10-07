@@ -14,8 +14,9 @@ jobs:
         uses: aurelien-baudet/workflow-dispatch@v2
         with:
           workflow: release.yaml
+          repo: mkindahl/ubiquitous-train
           token: ${{ secrets.PERSONAL_TOKEN }}
-          inputs: '{ "version": "${{ github.ref }}"}'
+          inputs: '{ "version": "${{ github.ref }}" }'
       - name: All done
         run: |
           echo "All done"

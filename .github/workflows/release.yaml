@@ -1,0 +1,21 @@
+on:
+  workflow_dispatch:
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Print info
+        run: |
+          echo GITHUB_REF: $GITHUB_REF
+          echo github.ref: ${{ github.ref }}
+      - name: Invoke workflow with inputs
+        uses: aurelien-baudet/workflow-dispatch@v2
+        with:
+          workflow: release.yaml
+          token: ${{ secrets.PERSONAL_TOKEN }}
+          inputs: '{ "version": "${{ github.ref }}"}'
+      - name: All done
+        run: |
+          echo "All done"

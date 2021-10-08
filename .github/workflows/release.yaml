@@ -1,5 +1,9 @@
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release'
+        required: true
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -16,7 +20,11 @@ jobs:
           workflow: release.yaml
           repo: mkindahl/ubiquitous-train
           token: ${{ secrets.PERSONAL_TOKEN }}
-          inputs: '{ "version": "${{ github.ref }}" }'
+          inputs: |
+            {
+              "version": "${{ github.event.inputs.version }}",
+              "magic": "${{ github.ref }}"
+            }
       - name: All done
         run: |
           echo "All done"

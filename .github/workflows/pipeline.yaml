@@ -1,4 +1,11 @@
-on: workflow_dispatch
+name: Trigger Pipeline
+on:
+  workflow_dispatch:
+    inputs:
+      upload-artifacts:
+        description: 'Upload artifacts'
+        required: false
+        default: false
 jobs:
   start_release:
     name: Start release
@@ -10,14 +17,23 @@ jobs:
         run: |
           echo GITHUB_REF: $GITHUB_REF
           echo github.ref: ${{ github.ref }}
+      - name: Show event
+        run: |
+          cat <<EOT
+          ${{ toJSON(github.event.inputs) }}
+          EOT
+          echo Upload: ${{ github.event.inputs.upload-artifacts }}
       - name: Trigger release workflow
-        uses: adityakar/workflow-dispatcher@v1.0
+        uses: peter-evans/repository-dispatch@v1
         with:
-          owner: mkindahl
+          repository: mkindahl/ubiquitous-train
+          event-type: trigger-release
+          client-payload: |
+            {
+              "ref": "${{ github.ref }}",
+              "upload-artifacts": "${{ github.event.inputs.upload-artifacts }}"
+            }
           token: ${{ secrets.PERSONAL_TOKEN }}
-          repo: ubiquitous-train
-          event_type: trigger-release
-          client_payload: '{"ref": "${{ github.ref }}"}'
       - name: All done
         run: |
           echo "All done"

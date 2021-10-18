@@ -1,0 +1,16 @@
+name: Notify
+on:
+  workflow_call:
+    inputs:
+      message:
+        description: 'Message'
+        required: true
+        type: string
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print info
+        run: |
+          echo "${{ toJSON(github.event.inputs) }}"
+          echo "${{ toJSON(inputs) }}"

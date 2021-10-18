@@ -29,3 +29,9 @@ jobs:
       - name: All done
         run: |
           echo "All done"
+
+  notify:
+    uses: mkindahl/solid-disco/.github/workflows/notify.yaml@main
+    needs: release
+    with:
+      message: Release ${{ github.event.inputs.version }} done

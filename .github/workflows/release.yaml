@@ -1,4 +1,4 @@
-name: Release
+name: Run Release
 on:
   workflow_dispatch:
     inputs:
@@ -6,7 +6,8 @@ on:
         description: 'Version to release'
         required: true
 jobs:
-  release:
+  check:
+    name: Check repository
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -15,20 +16,13 @@ jobs:
         run: |
           echo GITHUB_REF: $GITHUB_REF
           echo github.ref: ${{ github.ref }}
-      - name: Invoke workflow with inputs
-        uses: aurelien-baudet/workflow-dispatch@v2
-        with:
-          workflow: release.yaml
-          repo: mkindahl/ubiquitous-train
-          token: ${{ secrets.PERSONAL_TOKEN }}
-          inputs: |
-            {
-              "version": "${{ github.event.inputs.version }}",
-              "magic": "${{ github.ref }}"
-            }
-      - name: All done
-        run: |
-          echo "All done"
+  release:
+    name: Release it
+    uses: mkindahl/ubiquitous-train/.github/workflows/release.yaml@v1
+    needs: check
+    with:
+      version: ${{ github.event.inputs.version }}
+      magic: ${{ github.ref }}
 
   notify:
     uses: mkindahl/solid-disco/.github/workflows/notify.yaml@main
